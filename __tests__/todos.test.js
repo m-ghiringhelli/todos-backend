@@ -65,6 +65,20 @@ describe('todos', () => {
     expect(res.body).toEqual([user1Todo]);
   });
 
+  it('updates a todo for logged in user', async () => {
+    const [agent, user] = await registerAndLogin();
+    const todo = await Todo.insert({
+      description: 'update a todo',
+      completed: false,
+      user_id: user.id
+    });
+    const res = await agent
+      .put(`/api/v1/todos/${todo.id}`)
+      .send({ completed: true });
+    expect(res.status).toBe(200);
+    expect(res.body).toEqual({ ...todo, completed: true })
+  });
+
   afterAll(() => {
     pool.end();
   });
