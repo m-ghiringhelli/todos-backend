@@ -92,6 +92,25 @@ describe('todos', () => {
     expect(check).toBeNull();
   });
 
+  it('should return 401 if not authenticated', async () => {
+    const res = await request(app).get('/api/v1/todos');
+    expect(res.status).toEqual(401);
+  });
+
+  it('updating should return 403 for invalid users', async () => {
+    const [agent] = await registerAndLogin();
+    const user2= await UserService.create(mockUser2);
+    const todo = await Todo.insert({
+      description: 'pass this test',
+      completed: false,
+      user_id: user2.id
+    });
+    const res = await agent
+      .put(`/api/v1/todos/${todo.id}`)
+      .send({ completed: true });
+    expect(res.status).toBe(403);
+  });
+
   afterAll(() => {
     pool.end();
   });
