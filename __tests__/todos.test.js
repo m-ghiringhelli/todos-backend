@@ -28,8 +28,9 @@ describe('todos', () => {
 
   it('creates a new todo for registered user', async () => {
     const [agent, user] = await registerAndLogin();
-    const newTodo = { description: 'finish deliverable' };
+    const newTodo = { description: 'finish deliverable', completed: false };
     const res = await agent.post('/api/v1/todos').send(newTodo);
+
     expect(res.status).toEqual(200);
     expect(res.body).toEqual({
       id: expect.any(String),
