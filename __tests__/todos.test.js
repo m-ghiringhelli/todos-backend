@@ -76,7 +76,7 @@ describe('todos', () => {
       .put(`/api/v1/todos/${todo.id}`)
       .send({ completed: true });
     expect(res.status).toBe(200);
-    expect(res.body).toEqual({ ...todo, completed: true })
+    expect(res.body).toEqual({ ...todo, completed: true });
   });
 
   afterAll(() => {
