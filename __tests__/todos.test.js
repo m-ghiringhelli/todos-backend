@@ -3,10 +3,17 @@ const setup = require('../data/setup');
 const request = require('supertest');
 const app = require('../lib/app');
 const UserService = require('../lib/services/UserService');
+const Todo = require('../lib/models/Todo');
 
 const mockUser = {
   email: 'test@test.com',
   password: '123123'
+};
+const mockUser2 = {
+  firstName: 'Test',
+  lastName: 'User 2',
+  email: 'test2@example.com',
+  password: '123456',
 };
 
 const registerAndLogin = async (userProps = {}) => {
@@ -38,6 +45,24 @@ describe('todos', () => {
       user_id: user.id,
       completed: false
     });
+  });
+
+  it('gets todos for associated user', async () => {
+    const [agent, user] = await registerAndLogin();
+    const user2 = await UserService.create(mockUser2);
+    const user1Todo = await Todo.insert({
+      description: 'pass this test',
+      completed: false,
+      user_id: user.id
+    });
+    await Todo.insert({
+      description: 'or this one',
+      completed: false,
+      user_id: user2.id
+    });
+    const res = await agent.get('/api/v1/todos');
+    expect(res.status).toEqual(200);
+    expect(res.body).toEqual([user1Todo]);
   });
 
   afterAll(() => {
