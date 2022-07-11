@@ -1,0 +1,18 @@
+- setup user in sql
+- id, email, password hash
+- hash password
+- post /api/v1/users creates a new user
+- sign up
+- sign up function
+- sign in
+- sign in 
+- post /api/v1/users/me returns user
+- get /api/v1/todos gets all users to dos
+- post /api/v1/todos creates new todo
+- put /api/v1/todos/:id updates user's todo
+- delete /api/v1/todos/:id deletes user's todo
+- authenticate middleware
+- authorize middleware
+- 401 for non authenticated
+- trying to edit other user's todo returns 403
+- tests for all
